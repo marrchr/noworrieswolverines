@@ -12,17 +12,20 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
-.App {
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   text-align: center;
 }
 
-.App-header {
+.app-main {
+  flex-grow: 1;
   background-color: var(--blue);
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -33,7 +36,12 @@ body {
 .box > * + * {
   margin-left: var(--flow-space, 1em);
 }
-
+.logo {
+  width: 100%;
+  height: auto;
+  max-width: 200px;
+  margin: 1.75em 0;
+}
 .textContainer {
   position: absolute;
   top: 49px;
@@ -64,8 +72,8 @@ body {
 }
 .btn {
   border: none;
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   font-size: 1.5rem;
   font-weight: 700;
@@ -74,23 +82,67 @@ body {
   align-items: center;
   cursor: pointer;
 }
-.btn:hover {
-  text-shadow: 0 0 10px var(--yellow-light), 0 0 20px var(--yellow-light),
-    0 0 30px var(--yellow-light), 0 0 40px var(--yellow-light),
-    0 0 70px var(--yellow-light), 0 0 80px var(--yellow-light),
-    0 0 100px var(--yellow-light), 0 0 150px var(--yellow-light);
+.btn .icon {
+  font-size: 62px;
+  font-weight: 700;
+}
+.btn-small {
+  width: 40px;
+  height: 40px;
+}
+.btn-small .icon {
+  font-size: 24px;
+}
+.btn .icon-pause {
+  font-weight: 100;
 }
 .btn-start {
+  position: absolute;
+  bottom: 40px;
+  left: calc(50% - 20px);
   background-color: var(--yellow);
   color: var(--blue);
 }
 .btn-checkin {
+  flex-shrink: 0;
+  position: absolute;
+  top: -50px;
+  left: calc(50% - 50px);
   background-color: var(--yellow);
   color: var(--blue);
 }
-.play-icon {
-  font-size: 38px;
+.app-footer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 70px;
+  background-color: var(--blue-light);
 }
-.check-icon {
-  font-size: 38px;
+.app-footer-menu {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.contact {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.remove {
+  display: flex;
+  align-items: center;
+}
+.contact-icon {
+  font-size: 20px;
+  font-weight: 100;
+}
+.footer-icon {
+  font-size: 40px;
+  font-weight: 300;
+  color: var(--blue-dark);
 }

@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { CircleSlider } from "react-circle-slider";
 import "./App.css";
+import { ReactComponent as Logo } from "./logo.svg";
+import { sendSMS } from "./sms.js";
 
 function App() {
   const [sliderValue, setSliderValue] = useState(60);
@@ -28,11 +30,12 @@ function App() {
   };
 
   const handleStart = () => {
-    setTimerActive(true);
+    setTimerActive(!timerActive);
   };
 
   const handleCheckin = () => {
-    setTimerActive(false);
+    sendSMS("3604899963", "Hello Jeff");
+    sendSMS("7343202495", "Hello Chris");
   };
 
   const handleCircleSlider = (value) => {
@@ -43,9 +46,9 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2>No Worries Wolverines</h2>
+    <div className="app">
+      <main className="app-main">
+        <Logo className="logo" />
         <div style={{ position: "relative", marginBottom: "20px" }}>
           <div className="textContainer">{displayValue}</div>
           <CircleSlider
@@ -55,31 +58,62 @@ function App() {
             onChange={handleCircleSlider}
             size={250}
             max={120}
-            gradientColorFrom="#fffe52"
+            gradientColorFrom="#ffcb05"
             gradientColorTo="#ffcb05"
             knobRadius={20}
             circleWidth={20}
           />
-        </div>
-        <div className="controls box">
           <button
             onClick={handleStart}
-            className="btn btn-start"
+            className="btn btn-small btn-start"
             style={{ marginBottom: "20px" }}
           >
-            <span className="material-symbols-outlined play-icon">
-              play_arrow
-            </span>
-          </button>
-          <button
-            onClick={handleCheckin}
-            className="btn btn-checkin"
-            style={{ marginBottom: "20px" }}
-          >
-            <span class="material-symbols-outlined check-icon">done</span>
+            {timerActive && (
+              <span className="material-symbols-outlined icon icon-pause">
+                pause
+              </span>
+            )}
+            {!timerActive && (
+              <span className="material-symbols-outlined icon">play_arrow</span>
+            )}
           </button>
         </div>
-      </header>
+        <div className="contacts flow">
+          <div className="contact box">
+            <div className="name">Jeff</div>
+            <div className="number">360-489-9963</div>
+            <div className="remove">
+              <span className="material-symbols-outlined contact-icon">
+                do_not_disturb_on
+              </span>
+            </div>
+          </div>
+          <div className="contact box">
+            <div className="name">Chris</div>
+            <div className="number">734-320-2495</div>
+            <div className="remove">
+              <span className="material-symbols-outlined contact-icon">
+                do_not_disturb_on
+              </span>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer className="app-footer">
+        <button
+          onClick={handleCheckin}
+          className="btn btn-checkin"
+          style={{ marginBottom: "20px" }}
+        >
+          <span className="material-symbols-outlined icon">done</span>
+        </button>
+        <nav className="app-footer-menu">
+          <span className="material-symbols-outlined footer-icon">
+            group_add
+          </span>
+          <span className="material-symbols-outlined footer-icon">info</span>
+        </nav>
+      </footer>
     </div>
   );
 }

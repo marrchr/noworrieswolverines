@@ -111,6 +111,11 @@ body {
   background-color: var(--yellow);
   color: var(--blue);
 }
+.stop {
+  width: 15px;
+  height: 15px;
+  background-color: var(--blue);
+}
 .app-footer {
   position: relative;
   display: flex;

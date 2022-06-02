@@ -8,6 +8,7 @@ function App() {
   const [sliderValue, setSliderValue] = useState(60);
   const [timerValue, setTimerValue] = useState(3600);
   const [displayValue, setDisplayValue] = useState("01:00:00");
+  const [checkInTime, setCheckInTime] = useState(3600);
   const [timerActive, setTimerActive] = useState(false);
   const slider = useRef(null);
 
@@ -29,13 +30,19 @@ function App() {
     return date.toISOString().substr(11, 8);
   };
 
-  const handleStart = () => {
-    setTimerActive(!timerActive);
+  const handleStop = () => {
+    setTimerActive(false);
   };
 
   const handleCheckin = () => {
-    sendSMS("3604899963", "Hello Jeff");
-    sendSMS("7343202495", "Hello Chris");
+    if (!timerActive) {
+      setTimerActive(true);
+    } else {
+      setTimerValue(checkInTime);
+      setDisplayValue(toTime(checkInTime));
+    }
+    //endSMS("3604899963", "Hello Jeff");
+    //sendSMS("7343202495", "Hello Chris");
   };
 
   const handleCircleSlider = (value) => {
@@ -43,6 +50,7 @@ function App() {
     setSliderValue(value);
     setTimerValue(value * 60);
     setDisplayValue(toTime(value));
+    setCheckInTime(value);
   };
 
   return (
@@ -63,20 +71,15 @@ function App() {
             knobRadius={20}
             circleWidth={20}
           />
-          <button
-            onClick={handleStart}
-            className="btn btn-small btn-start"
-            style={{ marginBottom: "20px" }}
-          >
-            {timerActive && (
-              <span className="material-symbols-outlined icon icon-pause">
-                pause
-              </span>
-            )}
-            {!timerActive && (
-              <span className="material-symbols-outlined icon">play_arrow</span>
-            )}
-          </button>
+          {timerActive && (
+            <button
+              onClick={handleStop}
+              className="btn btn-small btn-start"
+              style={{ marginBottom: "20px" }}
+            >
+              <span className="stop"></span>
+            </button>
+          )}
         </div>
         <div className="contacts flow">
           <div className="contact box">
@@ -105,7 +108,12 @@ function App() {
           className="btn btn-checkin"
           style={{ marginBottom: "20px" }}
         >
-          <span className="material-symbols-outlined icon">done</span>
+          {timerActive && (
+            <span className="material-symbols-outlined icon">done</span>
+          )}
+          {!timerActive && (
+            <span className="material-symbols-outlined icon">play_arrow</span>
+          )}
         </button>
         <nav className="app-footer-menu">
           <span className="material-symbols-outlined footer-icon">

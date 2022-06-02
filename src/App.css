@@ -1,20 +1,23 @@
+:root {
+  --white: #fff;
+  --blue: #00274c;
+  --blue-light: #364f78;
+  --blue-dark: #000024;
+  --yellow: #ffcb05;
+  --yellow-light: #fffe52;
+  --yellow-dark: #c79b00;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
-  background-color: #282c34;
+  background-color: var(--blue);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,17 +27,11 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.flow > * + * {
+  margin-top: var(--flow-space, 1em);
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.box > * + * {
+  margin-left: var(--flow-space, 1em);
 }
 
 .textContainer {
@@ -51,14 +48,49 @@
   font-size: 2rem;
   line-height: 70px;
   text-align: center;
-  color: #ec008c;
+  color: var(--white);
 }
 
 .textContainer .minute {
   font-size: 18px;
   line-height: 15px;
-  background: -webkit-linear-gradient(#ec008c, #fc6767);
+  background: -webkit-linear-gradient(var(--yellow), var(--yellow-light));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+.controls {
+  display: flex;
+}
+.btn {
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.btn:hover {
+  text-shadow: 0 0 10px var(--yellow-light), 0 0 20px var(--yellow-light),
+    0 0 30px var(--yellow-light), 0 0 40px var(--yellow-light),
+    0 0 70px var(--yellow-light), 0 0 80px var(--yellow-light),
+    0 0 100px var(--yellow-light), 0 0 150px var(--yellow-light);
+}
+.btn-start {
+  background-color: var(--yellow);
+  color: var(--blue);
+}
+.btn-checkin {
+  background-color: var(--yellow);
+  color: var(--blue);
+}
+.play-icon {
+  font-size: 38px;
+}
+.check-icon {
+  font-size: 38px;
 }

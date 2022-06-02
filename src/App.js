@@ -55,18 +55,30 @@ function App() {
             onChange={handleCircleSlider}
             size={250}
             max={120}
-            gradientColorFrom="#ec008c"
-            gradientColorTo="#fc6767"
+            gradientColorFrom="#fffe52"
+            gradientColorTo="#ffcb05"
             knobRadius={20}
             circleWidth={20}
           />
         </div>
-        <button onClick={handleStart} style={{ marginBottom: "20px" }}>
-          Start
-        </button>
-        <button onClick={handleCheckin} style={{ marginBottom: "20px" }}>
-          Checkin
-        </button>
+        <div className="controls box">
+          <button
+            onClick={handleStart}
+            className="btn btn-start"
+            style={{ marginBottom: "20px" }}
+          >
+            <span className="material-symbols-outlined play-icon">
+              play_arrow
+            </span>
+          </button>
+          <button
+            onClick={handleCheckin}
+            className="btn btn-checkin"
+            style={{ marginBottom: "20px" }}
+          >
+            <span class="material-symbols-outlined check-icon">done</span>
+          </button>
+        </div>
       </header>
     </div>
   );

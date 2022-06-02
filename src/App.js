@@ -1,25 +1,50 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { CircleSlider } from "react-circle-slider";
 import "./App.css";
 
 function App() {
-  const [value, setValue] = useState(0);
+  const [sliderValue, setSliderValue] = useState(60);
+  const [timerValue, setTimerValue] = useState(60);
+  const [timerActive, setTimerActive] = useState(false);
   const slider = useRef(null);
+
+  useEffect(() => {
+    if (!timerActive) return;
+    const interval = setInterval(() => {
+      setTimerValue(timerValue - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timerActive, timerValue]);
+
+  const handleStart = () => {
+    setTimerActive(true);
+  };
+
+  const handleCheckin = () => {
+    setTimerActive(false);
+  };
+
+  const handleCircleSlider = (value) => {
+    setTimerActive(false);
+    setSliderValue(value);
+    setTimerValue(value);
+  };
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>No Worries Wolverines</h1>
-        <div style={{ position: "relative" }}>
+        <h2>No Worries Wolverines</h2>
+        <div style={{ position: "relative", marginBottom: "20px" }}>
           <div className="textContainer">
-            {value}
+            {sliderValue}
             <div className="minute">MINUTES</div>
           </div>
           <CircleSlider
             ref={slider}
-            value={value}
+            value={sliderValue}
             stepSize={5}
-            onChange={(value) => setValue(value)}
+            onChange={handleCircleSlider}
             size={250}
             max={120}
             gradientColorFrom="#ec008c"
@@ -28,6 +53,15 @@ function App() {
             circleWidth={20}
           />
         </div>
+        <button onClick={handleStart} style={{ marginBottom: "20px" }}>
+          Start
+        </button>
+        <div style={{ marginBottom: "20px" }}>
+          Time left till checkin: {timerValue}
+        </div>
+        <button onClick={handleCheckin} style={{ marginBottom: "20px" }}>
+          Checkin
+        </button>
       </header>
     </div>
   );

@@ -4,18 +4,28 @@ import "./App.css";
 
 function App() {
   const [sliderValue, setSliderValue] = useState(60);
-  const [timerValue, setTimerValue] = useState(60);
+  const [timerValue, setTimerValue] = useState(3600);
+  const [displayValue, setDisplayValue] = useState("01:00:00");
   const [timerActive, setTimerActive] = useState(false);
   const slider = useRef(null);
 
   useEffect(() => {
     if (!timerActive) return;
     const interval = setInterval(() => {
-      setTimerValue(timerValue - 1);
+      const newValue = timerValue - 1;
+      const newDisplayValue = toTime(timerValue - 1);
+      setTimerValue(newValue);
+      setDisplayValue(newDisplayValue);
     }, 1000);
 
     return () => clearInterval(interval);
   }, [timerActive, timerValue]);
+
+  const toTime = (seconds) => {
+    var date = new Date(null);
+    date.setSeconds(seconds);
+    return date.toISOString().substr(11, 8);
+  };
 
   const handleStart = () => {
     setTimerActive(true);
@@ -28,7 +38,8 @@ function App() {
   const handleCircleSlider = (value) => {
     setTimerActive(false);
     setSliderValue(value);
-    setTimerValue(value);
+    setTimerValue(value * 60);
+    setDisplayValue(toTime(value));
   };
 
   return (
@@ -57,7 +68,7 @@ function App() {
           Start
         </button>
         <div style={{ marginBottom: "20px" }}>
-          Time left till checkin: {timerValue}
+          Time left till checkin: {displayValue}
         </div>
         <button onClick={handleCheckin} style={{ marginBottom: "20px" }}>
           Checkin

@@ -47,10 +47,7 @@ function App() {
       <header className="App-header">
         <h2>No Worries Wolverines</h2>
         <div style={{ position: "relative", marginBottom: "20px" }}>
-          <div className="textContainer">
-            {sliderValue}
-            <div className="minute">MINUTES</div>
-          </div>
+          <div className="textContainer">{displayValue}</div>
           <CircleSlider
             ref={slider}
             value={sliderValue}
@@ -67,9 +64,6 @@ function App() {
         <button onClick={handleStart} style={{ marginBottom: "20px" }}>
           Start
         </button>
-        <div style={{ marginBottom: "20px" }}>
-          Time left till checkin: {displayValue}
-        </div>
         <button onClick={handleCheckin} style={{ marginBottom: "20px" }}>
           Checkin
         </button>

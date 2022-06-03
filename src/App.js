@@ -118,9 +118,9 @@ function App() {
   };
 
   const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+    // if (reason === "clickaway") {
+    //   return;
+    // }
     setSnackbarOpen(false);
   };
 
@@ -220,7 +220,11 @@ function App() {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         TransitionComponent={Slide}
       >
-        <Alert onClose={handleClose} severity={alert} sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={alert}
+          sx={{ width: "100%" }}
+        >
           {message}
         </Alert>
       </Snackbar>

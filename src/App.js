@@ -1,13 +1,25 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, forwardRef } from "react";
 import { CircleSlider } from "react-circle-slider";
 import "./App.css";
 import { ReactComponent as Logo } from "./logo.svg";
 //import { sendSMS } from "./sms.js";
-import "react-notifications/lib/notifications.css";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
+//MUI
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import MuiAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
+
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function App() {
   const [sliderValue, setSliderValue] = useState(60);
@@ -16,22 +28,29 @@ function App() {
   const [checkInTime, setCheckInTime] = useState(3600);
   const [timerActive, setTimerActive] = useState(false);
   const slider = useRef(null);
+  const [openSnackBar, setSnackbarOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [alert, setAlert] = useState("success");
 
   useEffect(() => {
     if (!timerActive) return;
     if (timerValue === 60) {
-      handleNotification("Heads Up", "You have 1 minutes left to check-in");
+      handleNotification(
+        "warning",
+        "Heads Up! You have 1 minutes left to check-in"
+      );
     }
     if (timerValue === 0) {
       handleNotification(
-        "Check-In Missed",
-        "A text message has been sent to your contacts"
+        "error",
+        "Check-In Missed - A text message has been sent to your contacts"
       );
     }
     if (timerValue === -10) {
       handleNotification(
-        "Check-In Past Due",
-        "You are 10 seconds past due checking-in"
+        "error",
+        "Check-In Past Due - You are 10 seconds past due checking-in"
       );
     }
     const interval = setInterval(() => {
@@ -66,8 +85,10 @@ function App() {
       setTimerValue(checkInTime);
       setDisplayValue(secondsToHms(checkInTime));
       handleNotification(
-        "Check-In Successful!",
-        `${secondsToHms(checkInTime)} until your next check-in`
+        "success",
+        `Check-In Successful! ${secondsToHms(
+          checkInTime
+        )} until your next check-in`
       );
     }
     //endSMS("3604899963", "Hello Jeff");
@@ -82,11 +103,39 @@ function App() {
     setCheckInTime(value * 60);
   };
 
-  const handleNotification = (title, message) => {
-    NotificationManager.warning(message, title, 5000, () => {
-      console.log("alert");
-    });
+  const handleNotification = (alert, message) => {
+    setSnackbarOpen(true);
+    setAlert(alert);
+    setMessage(message);
   };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleSnackbarClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     <div className="app">
@@ -151,20 +200,61 @@ function App() {
           )}
         </button>
         <nav className="app-footer-menu">
-          <span className="material-symbols-outlined footer-icon">
-            group_add
-          </span>
-          <button
-            className="footer-button"
-            onClick={() => handleNotification("Title Here", "Hello World")}
-          >
-            <span class="material-symbols-outlined footer-icon">
+          <button className="footer-button" onClick={handleClickOpen}>
+            <span className="material-symbols-outlined footer-icon">
+              group_add
+            </span>
+          </button>
+          <button className="footer-button" onClick={handleClickOpen}>
+            <span className="material-symbols-outlined footer-icon">
               manage_accounts
             </span>
           </button>
         </nav>
       </footer>
-      <NotificationContainer />
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+        action={action}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        TransitionComponent={Slide}
+      >
+        <Alert onClose={handleClose} severity={alert} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add New Contact</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Provide a name and phone number of a person you would like notified
+            if you don't check-in.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Phone"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Add</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

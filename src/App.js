@@ -34,7 +34,8 @@ function App() {
   const [openSnackBar, setSnackbarOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
-  const [accountName, setAccountName] = useState("Enter Name Here");
+  const [accountName, setAccountName] = useState("");
+  const [accountPhone, setAccountPhone] = useState("");
   const [message, setMessage] = useState("");
   const [alert, setAlert] = useState("success");
   const [contactName, setContactName] = useState("");
@@ -153,6 +154,10 @@ function App() {
 
   const handleAccountNameField = (event) => {
     setAccountName(event.target.value);
+  };
+
+  const handleAccountPhoneField = (event) => {
+    setAccountPhone(event.target.value);
   };
 
   const handleAddContact = () => {
@@ -331,6 +336,18 @@ function App() {
             variant="standard"
             sx={{ marginBottom: "15px" }}
             onChange={handleAccountNameField}
+          />
+          <TextField
+            value={accountPhone}
+            autoFocus
+            margin="dense"
+            id="accountphone"
+            label="Your Phone Number"
+            type="text"
+            fullWidth
+            variant="standard"
+            sx={{ marginBottom: "15px" }}
+            onChange={handleAccountPhoneField}
           />
           <FormGroup>
             <FormControlLabel

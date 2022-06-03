@@ -16,6 +16,9 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import MuiAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -30,6 +33,8 @@ function App() {
   const slider = useRef(null);
   const [openSnackBar, setSnackbarOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [accountName, setAccountName] = useState("");
   const [message, setMessage] = useState("");
   const [alert, setAlert] = useState("success");
   const [contactName, setContactName] = useState("");
@@ -54,7 +59,7 @@ function App() {
         const phoneFormatted = phone.replaceAll("-", "");
         sendSMS(
           phoneFormatted,
-          `Hello ${contact.name}, you are being notified that Bob has not checked-in and may need assistance. See Bob's last known location: https://location.com`
+          `Hello ${contact.name}, you are being notified that ${accountName} has not checked-in and may need assistance. See ${accountName}'s last known location: https://location.com`
         );
       });
     }
@@ -72,7 +77,7 @@ function App() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [timerActive, timerValue]);
+  }, [timerActive, timerValue, accountName, contacts]);
 
   function secondsToHms(d) {
     d = Number(d);
@@ -130,12 +135,24 @@ function App() {
     setOpen(false);
   };
 
+  const handleAccountOpen = () => {
+    setAccountOpen(true);
+  };
+
+  const handleAccountClose = () => {
+    setAccountOpen(false);
+  };
+
   const handleNameField = (event) => {
     setContactName(event.target.value);
   };
 
   const handlePhoneField = (event) => {
     setContactPhone(event.target.value);
+  };
+
+  const handleAccountNameField = (event) => {
+    setAccountName(event.target.value);
   };
 
   const handleAddContact = () => {
@@ -237,7 +254,7 @@ function App() {
               group_add
             </span>
           </button>
-          <button className="footer-button">
+          <button className="footer-button" onClick={handleAccountOpen}>
             <span className="material-symbols-outlined footer-icon">
               manage_accounts
             </span>
@@ -260,7 +277,7 @@ function App() {
           {message}
         </Alert>
       </Snackbar>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog key="dialog-contact" open={open} onClose={handleClose}>
         <DialogTitle>Add New Contact</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -291,6 +308,40 @@ function App() {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleAddContact}>Add</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        key="dialog-account"
+        open={accountOpen}
+        onClose={handleAccountClose}
+      >
+        <DialogTitle>User Account</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ marginBottom: "20px" }}>
+            These settings will help format communication with your contacts.
+          </DialogContentText>
+          <TextField
+            value={accountName}
+            autoFocus
+            margin="dense"
+            id="accountname"
+            label="Your Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            sx={{ marginBottom: "15px" }}
+            onChange={handleAccountNameField}
+          />
+          <FormGroup>
+            <FormControlLabel
+              control={<Switch defaultChecked />}
+              label="Share current location"
+            />
+          </FormGroup>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAccountClose}>Cancel</Button>
+          <Button onClick={handleAccountClose}>Update</Button>
         </DialogActions>
       </Dialog>
     </div>

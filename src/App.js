@@ -19,22 +19,19 @@ function App() {
 
   useEffect(() => {
     if (!timerActive) return;
-    if (timerValue == 299) {
-      handleNotification(
-        "Heads Up",
-        "You have 5 minutes left until you have to check in"
-      );
+    if (timerValue === 60) {
+      handleNotification("Heads Up", "You have 1 minutes left to check-in");
     }
-    if (timerValue == 0) {
+    if (timerValue === 0) {
       handleNotification(
-        "Check In Missed",
+        "Check-In Missed",
         "A text message has been sent to your contacts"
       );
     }
-    if (timerValue == -10) {
+    if (timerValue === -10) {
       handleNotification(
-        "Check In Past Due",
-        "It has been 10 seconds sense you should have checked in"
+        "Check-In Past Due",
+        "You are 10 seconds past due checking-in"
       );
     }
     const interval = setInterval(() => {
@@ -68,6 +65,10 @@ function App() {
     } else {
       setTimerValue(checkInTime);
       setDisplayValue(secondsToHms(checkInTime));
+      handleNotification(
+        "Check-In Successful!",
+        `${secondsToHms(checkInTime)} until your next check-in`
+      );
     }
     //endSMS("3604899963", "Hello Jeff");
     //sendSMS("7343202495", "Hello Chris");

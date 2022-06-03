@@ -1,4 +1,6 @@
 export function sendSMS(number, message) {
+  console.log(number, message);
+
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -17,11 +19,11 @@ export function sendSMS(number, message) {
     redirect: "follow",
   };
 
-  fetch(
-    "https://chcr-services.med.umich.edu/api/v1/notifications/send",
-    requestOptions
-  )
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+  // fetch(
+  //   "https://chcr-services.med.umich.edu/api/v1/notifications/send",
+  //   requestOptions
+  // )
+  //   .then((response) => response.text())
+  //   .then((result) => console.log(result))
+  //   .catch((error) => console.log("error", error));
 }

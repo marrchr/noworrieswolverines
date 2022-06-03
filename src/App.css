@@ -7,15 +7,21 @@
   --yellow-light: #fffe52;
   --yellow-dark: #c79b00;
 }
-
+html {
+  height: 100%;
+}
 body {
   font-family: "Roboto", sans-serif;
+  overflow: hidden;
+  height: 100%;
 }
-
+#root {
+  height: 100%;
+}
 .app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100%;
   text-align: center;
 }
 
@@ -97,11 +103,15 @@ body {
   font-weight: 100;
 }
 .btn-start {
+  display: block;
   position: absolute;
   bottom: 40px;
   left: calc(50% - 20px);
-  background-color: var(--yellow);
+  width: 40px;
+  height: 40px;
+  background: var(--yellow);
   color: var(--blue);
+  font-size: unset;
 }
 .btn-checkin {
   flex-shrink: 0;
@@ -112,9 +122,12 @@ body {
   color: var(--blue);
 }
 .stop {
-  width: 15px;
-  height: 15px;
-  background-color: var(--blue);
+  position: absolute;
+  top: calc(50% - 7px);
+  left: calc(50% - 7px);
+  width: 14px;
+  height: 14px;
+  background: var(--blue);
 }
 .app-footer {
   position: relative;
@@ -141,6 +154,9 @@ body {
 .remove {
   display: flex;
   align-items: center;
+  background: none;
+  border: none;
+  color: var(--white);
 }
 .contact-icon {
   font-size: 20px;

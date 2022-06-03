@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, forwardRef } from "react";
 import { CircleSlider } from "react-circle-slider";
 import "./App.css";
 import { ReactComponent as Logo } from "./logo.svg";
-//import { sendSMS } from "./sms.js";
+import { sendSMS } from "./sms.js";
 //MUI
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -32,6 +32,9 @@ function App() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [alert, setAlert] = useState("success");
+  const [contactName, setContactName] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
     if (!timerActive) return;
@@ -46,6 +49,14 @@ function App() {
         "error",
         "Check-In Missed - A text message has been sent to your contacts"
       );
+      contacts.forEach((contact) => {
+        const phone = contact.phone;
+        const phoneFormatted = phone.replaceAll("-", "");
+        sendSMS(
+          phoneFormatted,
+          `Hello ${contact.name}, you are being notified that Bob has not checked-in and may need assistance. See Bob's last known location: https://location.com`
+        );
+      });
     }
     if (timerValue === -10) {
       handleNotification(
@@ -91,8 +102,6 @@ function App() {
         )} until your next check-in`
       );
     }
-    //endSMS("3604899963", "Hello Jeff");
-    //sendSMS("7343202495", "Hello Chris");
   };
 
   const handleCircleSlider = (value) => {
@@ -115,6 +124,29 @@ function App() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleNameField = (event) => {
+    setContactName(event.target.value);
+  };
+
+  const handlePhoneField = (event) => {
+    setContactPhone(event.target.value);
+  };
+
+  const handleAddContact = () => {
+    const newArray = [...contacts, { name: contactName, phone: contactPhone }];
+    setContacts(newArray);
+    setOpen(false);
+  };
+
+  const handleRemoveContact = (phone) => {
+    const arr = [...contacts];
+    const indexOfObject = arr.findIndex((object) => {
+      return object.phone === phone;
+    });
+    arr.splice(indexOfObject, 1);
+    setContacts(arr);
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -166,24 +198,20 @@ function App() {
           )}
         </div>
         <div className="contacts flow">
-          <div className="contact box">
-            <div className="name">Jeff</div>
-            <div className="number">360-489-9963</div>
-            <div className="remove">
-              <span className="material-symbols-outlined contact-icon">
-                do_not_disturb_on
-              </span>
+          {contacts.map((contact) => (
+            <div key={contact.phone} className="contact box">
+              <div className="name">{contact.name}</div>
+              <div className="number">{contact.phone}</div>
+              <button
+                className="remove"
+                onClick={() => handleRemoveContact(contact.phone)}
+              >
+                <span className="material-symbols-outlined contact-icon">
+                  do_not_disturb_on
+                </span>
+              </button>
             </div>
-          </div>
-          <div className="contact box">
-            <div className="name">Chris</div>
-            <div className="number">734-320-2495</div>
-            <div className="remove">
-              <span className="material-symbols-outlined contact-icon">
-                do_not_disturb_on
-              </span>
-            </div>
-          </div>
+          ))}
         </div>
       </main>
       <footer className="app-footer">
@@ -205,7 +233,7 @@ function App() {
               group_add
             </span>
           </button>
-          <button className="footer-button" onClick={handleClickOpen}>
+          <button className="footer-button">
             <span className="material-symbols-outlined footer-icon">
               manage_accounts
             </span>
@@ -243,6 +271,7 @@ function App() {
             type="text"
             fullWidth
             variant="standard"
+            onChange={handleNameField}
           />
           <TextField
             autoFocus
@@ -252,11 +281,12 @@ function App() {
             type="text"
             fullWidth
             variant="standard"
+            onChange={handlePhoneField}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add</Button>
+          <Button onClick={handleAddContact}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>

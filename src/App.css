@@ -149,5 +149,19 @@ body {
 .footer-icon {
   font-size: 40px;
   font-weight: 300;
-  color: var(--blue-dark);
+  color: var(--white);
+}
+.footer-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.notification-container {
+  width: 100% !important;
+  max-width: 400px;
+}
+.notification-warning {
+  background-color: var(--yellow) !important;
+  color: var(--blue) !important;
+  opacity: 1 !important;
 }

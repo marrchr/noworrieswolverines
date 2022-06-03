@@ -2,21 +2,44 @@ import React, { useState, useRef, useEffect } from "react";
 import { CircleSlider } from "react-circle-slider";
 import "./App.css";
 import { ReactComponent as Logo } from "./logo.svg";
-import { sendSMS } from "./sms.js";
+//import { sendSMS } from "./sms.js";
+import "react-notifications/lib/notifications.css";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
 
 function App() {
   const [sliderValue, setSliderValue] = useState(60);
   const [timerValue, setTimerValue] = useState(3600);
-  const [displayValue, setDisplayValue] = useState("01:00:00");
+  const [displayValue, setDisplayValue] = useState("1:00:00");
   const [checkInTime, setCheckInTime] = useState(3600);
   const [timerActive, setTimerActive] = useState(false);
   const slider = useRef(null);
 
   useEffect(() => {
     if (!timerActive) return;
+    if (timerValue == 299) {
+      handleNotification(
+        "Heads Up",
+        "You have 5 minutes left until you have to check in"
+      );
+    }
+    if (timerValue == 0) {
+      handleNotification(
+        "Check In Missed",
+        "A text message has been sent to your contacts"
+      );
+    }
+    if (timerValue == -10) {
+      handleNotification(
+        "Check In Past Due",
+        "It has been 10 seconds sense you should have checked in"
+      );
+    }
     const interval = setInterval(() => {
       const newValue = timerValue - 1;
-      const newDisplayValue = toTime(timerValue - 1);
+      const newDisplayValue = secondsToHms(timerValue - 1);
       setTimerValue(newValue);
       setDisplayValue(newDisplayValue);
     }, 1000);
@@ -24,11 +47,16 @@ function App() {
     return () => clearInterval(interval);
   }, [timerActive, timerValue]);
 
-  const toTime = (seconds) => {
-    var date = new Date(null);
-    date.setSeconds(seconds);
-    return date.toISOString().substr(11, 8);
-  };
+  function secondsToHms(d) {
+    d = Number(d);
+    const h = Math.floor(d / 3600);
+    const m = Math.floor((d % 3600) / 60);
+    const s = Math.floor((d % 3600) % 60);
+    const hDisplay = h > 0 ? `${h}:` : "";
+    const mDisplay = m > 0 ? (m < 10 ? `0${m}:` : `${m}:`) : "00:";
+    const sDisplay = s > 0 ? (s < 10 ? `0${s}` : `${s}`) : "00";
+    return hDisplay + mDisplay + sDisplay;
+  }
 
   const handleStop = () => {
     setTimerActive(false);
@@ -39,7 +67,7 @@ function App() {
       setTimerActive(true);
     } else {
       setTimerValue(checkInTime);
-      setDisplayValue(toTime(checkInTime));
+      setDisplayValue(secondsToHms(checkInTime));
     }
     //endSMS("3604899963", "Hello Jeff");
     //sendSMS("7343202495", "Hello Chris");
@@ -49,8 +77,14 @@ function App() {
     setTimerActive(false);
     setSliderValue(value);
     setTimerValue(value * 60);
-    setDisplayValue(toTime(value));
-    setCheckInTime(value);
+    setDisplayValue(secondsToHms(value * 60));
+    setCheckInTime(value * 60);
+  };
+
+  const handleNotification = (title, message) => {
+    NotificationManager.warning(message, title, 5000, () => {
+      console.log("alert");
+    });
   };
 
   return (
@@ -62,7 +96,7 @@ function App() {
           <CircleSlider
             ref={slider}
             value={sliderValue}
-            stepSize={5}
+            stepSize={1}
             onChange={handleCircleSlider}
             size={250}
             max={120}
@@ -119,9 +153,17 @@ function App() {
           <span className="material-symbols-outlined footer-icon">
             group_add
           </span>
-          <span className="material-symbols-outlined footer-icon">info</span>
+          <button
+            className="footer-button"
+            onClick={() => handleNotification("Title Here", "Hello World")}
+          >
+            <span class="material-symbols-outlined footer-icon">
+              manage_accounts
+            </span>
+          </button>
         </nav>
       </footer>
+      <NotificationContainer />
     </div>
   );
 }

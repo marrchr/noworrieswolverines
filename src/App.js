@@ -34,7 +34,7 @@ function App() {
   const [openSnackBar, setSnackbarOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
-  const [accountName, setAccountName] = useState("");
+  const [accountName, setAccountName] = useState("Enter Name Here");
   const [message, setMessage] = useState("");
   const [alert, setAlert] = useState("success");
   const [contactName, setContactName] = useState("");
@@ -59,7 +59,7 @@ function App() {
         const phoneFormatted = phone.replaceAll("-", "");
         sendSMS(
           phoneFormatted,
-          `Hello ${contact.name}, you are being notified that ${accountName} has not checked-in and may need assistance. See ${accountName}'s last known location: https://location.com`
+          `Hello ${contact.name}, you are being notified that ${accountName} has not checked-in and may need assistance. See ${accountName}'s last known location: https://noworrieswolverines.herokuapp.com/map`
         );
       });
     }

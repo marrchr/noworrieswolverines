@@ -92,6 +92,10 @@ function App() {
   const handleCheckin = () => {
     if (!timerActive) {
       setTimerActive(true);
+      handleNotification(
+        "success",
+        `Timer Started! ${secondsToHms(timerValue)} until your next check-in`
+      );
     } else {
       setTimerValue(checkInTime);
       setDisplayValue(secondsToHms(checkInTime));
@@ -245,7 +249,7 @@ function App() {
         autoHideDuration={5000}
         onClose={handleSnackbarClose}
         action={action}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         TransitionComponent={Slide}
       >
         <Alert
